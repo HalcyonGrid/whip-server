@@ -1,7 +1,6 @@
-# whip-server
-#### The InWorldz WHIP distributed asset server
+# The HalcyonGrid WHIP distributed asset server
 
-WHIPs goals are fairly straightforward. It is not intended to compete with or be a replacement for the very robust distributed databases and key/value stores available today, but it served us very well for 5 years for the storage of immutable assets in the following respects:
+WHIP's goals are fairly straightforward. It is not intended to compete with or be a replacement for the very robust distributed databases and key/value stores available today, but it served InWorldz very well for 5 years for the storage of immutable assets in the following respects:
 
 * Provides cheap RF=1 storage once a peer server has been filled
 * Allows for a primary with replica nodes to protect the active writeable server(s) from data loss
@@ -11,12 +10,12 @@ WHIPs goals are fairly straightforward. It is not intended to compete with or be
 * Allows for the easy pruning of temporary assets used for avatar appearance without shuffling them between simulators
 * Allows for online adding of new nodes to increase total storage space.
 
-WHIP has been extensively tested on windows with very little runtime on linux.
+WHIP has been extensively tested on Windows with relatively little runtime on Linux.
 There may be bugs in the posix implementation that need fixing.
 
-#### Things WHIP doesn't do
+## Things WHIP doesn't do
 * WHIP is a storage layer and doesn't include any deduplication by default.
 
-#### Things I'd love to see implemented
+## Things I'd love to see implemented
 * Native deduplication without an extra layer
 * Implementation of bloom filters and filter sharing between read-only nodes to increase the efficiency of queries on a large number of nodes

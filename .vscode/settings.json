@@ -1,0 +1,8 @@
+{
+  "cmake.configureOnOpen": true,
+  "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+  "editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true
+}

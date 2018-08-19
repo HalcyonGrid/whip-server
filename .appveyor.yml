@@ -1,0 +1,76 @@
+init:
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") { $env:TAG_VERSION = "$env:APPVEYOR_REPO_TAG_NAME.$env:APPVEYOR_BUILD_NUMBER" } else { $env:TAG_VERSION = "v5.0.1.$env:APPVEYOR_BUILD_NUMBER-alpha" }
+  - ps: $env:TAG_VERSION = $env:TAG_VERSION -replace 'v',''
+  - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
+  - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
+
+image:
+- Visual Studio 2017
+- Ubuntu
+
+configuration: Release
+
+platform:
+- x64
+
+nuget:
+  disable_publish_on_pr: true
+
+skip_commits:
+  files:
+  - docs/*
+  - README.md
+  - .gitignore
+  - LICENSE
+
+#cache:
+#-
+
+before_build:
+- ps: |
+    if ($isLinux) {
+      $env:EDITION = "linux"
+    } else {
+      $env:EDITION = "windows"
+    }
+- ps: (Get-Content whip/version.h) -replace 'VERSION = "[^"]+"', ( -join( 'VERSION = "', "$env:TAG_VERSION", '"' ) ) | Set-Content whip/version.h
+
+build:
+  parallel: true
+  verbosity: minimal
+
+for:
+-
+  matrix:
+    only:
+    - image: Visual Studio 2017
+  build_script:
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - build.bat
+-
+  matrix:
+    only:
+    - image: Ubuntu
+  build_script:
+  - ./build.sh
+
+after_build:
+- ps: Rename-Item -Path bin -NewName whip
+
+# No tests for now.
+test: off
+
+artifacts:
+- path: whip
+  name: WhipServer-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+  type: zip
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: DlRS0U90AATbPkzxigCLwaGe1vguHFeC3a0YhMZRA/OYEbLQ8+ybp2OGfqgwpbW4
+  artifact: WhipServer-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+  draft: true
+  prerelease: false
+  on:
+    APPVEYOR_REPO_TAG: true
