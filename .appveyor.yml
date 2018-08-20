@@ -24,9 +24,13 @@ skip_commits:
   - LICENSE
 
 cache:
-- envs # Conan installation
-- c:\conanData
-- /tmp/conanData
+- envs -> .appveyor.yml # Conan installation
+- c:\conanData -> conanfile.txt
+- /tmp/conanData -> conanfile.txt
+- conanbuildinfo.cmake -> conanfile.txt
+- conanbuildinfo.txt -> conanfile.txt
+- conaninfo.txt -> conanfile.txt
+- build -> CMakeLists.txt
 
 install:
 - echo "Downloading conan..."
