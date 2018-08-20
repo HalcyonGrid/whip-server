@@ -46,13 +46,13 @@ for:
     - image: Visual Studio 2017
   build_script:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-  - build.bat
+  - build.bat Release
 -
   matrix:
     only:
     - image: Ubuntu
   build_script:
-  - ./build.sh
+  - ./build.sh Release
 
 after_build:
 - ps: Rename-Item -Path bin -NewName whip

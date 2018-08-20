@@ -29,5 +29,8 @@
 
 # CMake
 build/
-
 bin/
+
+# Conan build files
+conanbuildinfo.*
+conaninfo.txt
