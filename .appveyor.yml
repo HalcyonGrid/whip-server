@@ -25,11 +25,13 @@ skip_commits:
 
 cache:
 - envs # Conan installation
-- c:\.conan
-- ~/.conan
+- c:\conanData
+- /tmp/conanData
 
 install:
 - echo "Downloading conan..."
+- cmd: SET CONAN_USER_HOME=c:\conanData
+- sh: export CONAN_USER_HOME=/tmp/conanData
 - cmd: set PATH=%PATH%;%PYTHON%/Scripts/
 - cmd: pip.exe install conan --upgrade
 - sh: pip install conan --upgrade
@@ -66,13 +68,13 @@ for:
   - ./build.sh Release
 
 after_build:
-- ps: Rename-Item -Path bin -NewName whip-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+- ps: Rename-Item -Path bin -NewName whip-$env:APPVEYOR_BUILD_VERSION-$env:APPVEYOR_REPO_BRANCH-$env:EDITION
 
 # No tests for now.
 test: off
 
 artifacts:
-- path: whip
+- path: whip-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
   name: WhipServer-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
   type: zip
 
