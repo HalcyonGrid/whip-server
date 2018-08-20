@@ -65,7 +65,7 @@ for:
   - ./build.sh Release
 
 after_build:
-- ps: Rename-Item -Path bin -NewName whip
+- ps: Rename-Item -Path bin -NewName whip-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
 
 # No tests for now.
 test: off
