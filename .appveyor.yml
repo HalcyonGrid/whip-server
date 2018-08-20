@@ -23,8 +23,10 @@ skip_commits:
   - .gitignore
   - LICENSE
 
-#cache:
-#-
+cache:
+- envs # Conan installation
+- c:\.conan
+- ~/.conan
 
 install:
 - cmd: echo "Downloading conan..."
