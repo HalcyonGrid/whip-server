@@ -26,6 +26,14 @@ skip_commits:
 #cache:
 #-
 
+install:
+- cmd: echo "Downloading conan..."
+- cmd: set PATH=%PATH%;%PYTHON%/Scripts/
+- cmd: pip.exe install conan --upgrade
+- cmd: conan user # Create the conan data directory
+- cmd: conan --version
+- cmd: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
 before_build:
 - ps: |
     if ($isLinux) {
