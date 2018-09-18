@@ -1,5 +1,9 @@
 # The HalcyonGrid WHIP distributed asset server
 
+Build Status
+* Master branch: [![Build status](https://ci.appveyor.com/api/projects/status/1374dbw2y5f534va/branch/master?svg=true)](https://ci.appveyor.com/project/HalcyonGrid/whip-server/branch/master)
+* Latest release: [https://github.com/HalcyonGrid/whip-server/releases](https://github.com/HalcyonGrid/whip-server/releases)
+
 WHIP's goals are fairly straightforward. It is not intended to compete with or be a replacement for the very robust distributed databases and key/value stores available today, but it served InWorldz very well for 5 years for the storage of immutable assets in the following respects:
 
 * Provides cheap RF=1 storage once a peer server has been filled
