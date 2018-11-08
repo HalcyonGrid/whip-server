@@ -9,7 +9,7 @@ conan install . -s build_type=%buildType% -s arch=x86_64 -s compiler.runtime=MTd
 MKDIR build
 CD build
 cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=%buildType%
-cmake --build .
+cmake --build . --config %buildType%
 CD ..
 
 REM Prepare package

@@ -10,7 +10,7 @@ conan install . -s build_type=$buildType -s arch=x86_64 --build=missing
 mkdir build 2>/dev/null
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=$buildType
-cmake --build .
+cmake --build . --config $buildType
 cd ..
 
 # Prepare package
