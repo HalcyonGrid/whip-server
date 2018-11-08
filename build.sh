@@ -16,4 +16,4 @@ cd ..
 # Prepare package
 mkdir bin 2>/dev/null
 cp whip.cfg.sample bin/
-cp build/whip bin/
+cp build/bin/whip bin/
