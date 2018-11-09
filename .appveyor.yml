@@ -6,7 +6,12 @@ init:
 
 image:
 - Visual Studio 2017
-#- Ubuntu ## Disabled until we can solve the Boost problem.
+- Ubuntu
+
+# Ubuntu build allowed to fail until we can solve the Boost problem.
+matrix:
+  allow_failures:
+    - image: Ubuntu
 
 configuration: Release
 
