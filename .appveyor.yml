@@ -6,7 +6,7 @@ init:
 
 image:
 - Visual Studio 2017
-- Ubuntu
+#- Ubuntu ## Disabled until we can solve the Boost problem.
 
 configuration: Release
 
