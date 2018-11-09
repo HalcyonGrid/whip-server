@@ -41,7 +41,7 @@ install:
 - sh: sudo -H pip install conan --upgrade
 - conan user # Create the conan data directory
 - conan --version
-- conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+- conan remote add --force bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 before_build:
 - ps: |
