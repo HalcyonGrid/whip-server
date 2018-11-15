@@ -5,14 +5,13 @@
 
 #include "AssetServer.h"
 #include "Random.h"
+#include "version.h"
 
 #include <boost/function.hpp>
 #include <boost/thread/mutex.hpp>
 #include <iostream>
 #include <fstream>
 
-
-const std::string& VERSION = "5.01";
 boost::asio::io_service* AppIoService;
 
 boost::function0<void> console_ctrl_function;
@@ -97,4 +96,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-

@@ -1,0 +1,98 @@
+init:
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") { $env:TAG_VERSION = "$env:APPVEYOR_REPO_TAG_NAME.$env:APPVEYOR_BUILD_NUMBER" } else { $env:TAG_VERSION = "v5.0.1.$env:APPVEYOR_BUILD_NUMBER-alpha" }
+  - ps: $env:TAG_VERSION = $env:TAG_VERSION -replace 'v',''
+  - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
+  - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
+
+image:
+- Visual Studio 2017
+- Ubuntu
+
+# Ubuntu build allowed to fail until we can solve the Boost problem.
+matrix:
+  allow_failures:
+    - image: Ubuntu
+
+configuration: Release
+
+platform:
+- x64
+
+nuget:
+  disable_publish_on_pr: true
+
+skip_commits:
+  files:
+  - docs/*
+  - README.md
+  - .gitignore
+  - LICENSE
+
+cache:
+- envs -> .appveyor.yml # Conan installation
+- c:\conanData -> conanfile.txt
+- /tmp/conanData -> conanfile.txt
+- conanbuildinfo.cmake -> conanfile.txt
+- conanbuildinfo.txt -> conanfile.txt
+- conaninfo.txt -> conanfile.txt
+- build -> CMakeLists.txt
+
+install:
+- echo "Downloading conan..."
+- cmd: SET CONAN_USER_HOME=c:\conanData
+- sh: export CONAN_USER_HOME=/tmp/conanData
+- cmd: set PATH=%PATH%;%PYTHON%/Scripts/
+- cmd: pip.exe install conan --upgrade
+- sh: sudo -H pip install conan --upgrade
+- conan user # Create the conan data directory
+- conan --version
+- conan remote add --force bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+before_build:
+- ps: |
+    if ($isLinux) {
+      $env:EDITION = "linux"
+    } else {
+      $env:EDITION = "windows"
+    }
+- ps: (Get-Content whip/version.h) -replace 'VERSION = "[^"]+"', ( -join( 'VERSION = "', "$env:TAG_VERSION", '"' ) ) | Set-Content whip/version.h
+
+build:
+  parallel: true
+  verbosity: minimal
+
+for:
+-
+  matrix:
+    only:
+    - image: Visual Studio 2017
+  build_script:
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - build.bat Release
+-
+  matrix:
+    only:
+    - image: Ubuntu
+  build_script:
+  - ./build.sh Release
+
+after_build:
+- ps: Rename-Item -Path bin -NewName whip-$env:APPVEYOR_BUILD_VERSION-$env:APPVEYOR_REPO_BRANCH-$env:EDITION
+
+# No tests for now.
+test: off
+
+artifacts:
+- path: whip-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+  name: WhipServer-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+  type: zip
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: DlRS0U90AATbPkzxigCLwaGe1vguHFeC3a0YhMZRA/OYEbLQ8+ybp2OGfqgwpbW4
+  artifact: WhipServer-$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)-$(EDITION)
+  draft: true
+  prerelease: false
+  on:
+    APPVEYOR_REPO_TAG: true
